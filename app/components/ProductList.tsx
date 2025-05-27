@@ -6,7 +6,7 @@ import { Product } from '@/lib/generated/prisma' // Prisma에서 Product 타입 
 
 // 장바구니 기능을 구현할 유틸리티 함수나 훅 임포트
 // import { useCart } from '@/hooks/useCart'; // 예시로 useCart 훅을 사용한다고 가정
-import { addToCart } from '@/utils/cart'; // 예시 유틸 함수
+import { addToCart } from '@/app/utils/cart'; // 예시 유틸 함수
 
 //props로 받을 상품 목록의 타입 정의
 interface ProductListProps {
