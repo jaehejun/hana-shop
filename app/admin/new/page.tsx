@@ -58,7 +58,7 @@ export default function AddNewProductPage() {
         try {   // (4) try 블록 시작 - 여기서 에러나면 catch 블록으로 점프
 
             // 1. 호출할 API 라우트 주소 설정 (Next.js의 API Route 활용)
-            const apiUrl = '/api/admin/new';
+            const apiUrl = '/api/admin/products'; // 상품 등록을 처리하는 API 엔드포인트
 
             // 2. fetch API를 사용하여 POST 요청 보내기
             // 첫번째 인자로 URL, 두번째 인자로 요청 옵션 객체를 전달
