@@ -35,10 +35,11 @@ export default function AddNewProductPage() {
     // -> <HTMLFormElement>는 HTML Form 요소에서 발생한 이벤트임을 나타냄
     // -> 이 타입을 지정해주면 TypeScript가 event.target같은 속성에 접근시 이 요소가 <form>임을 알 수 있음
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        // (1) 동기 실행
         event.preventDefault(); // 기본 폼 제출 동작 막기(페이지 새로고침 방지)
                                 // 싱글 페이지 어플리케이션(SPA)처럼 동작하게 하기 위함        
 
-        // 입력 값 모으기
+        // 입력 값 모으기 (2) 동기 실행
         const newProduct = {
             name,
             description,
@@ -46,18 +47,75 @@ export default function AddNewProductPage() {
             imageUrl,
         };
 
-        console.log('새로운 상품 등록:', newProduct);
+        console.log('새로운 상품 등록:', newProduct); // (3) 동기 실행
 
         // TODO: 실제 API 호출로 상품 등록하기
         // 예: fetch('/api/admin/new', { method: 'POST', body: JSON.stringify(newProduct) })
         // 여기서는 콘솔에 출력만 하고 실제 API 호출은 생략
         // 성공하면 메시지 보여주거나 다른 페이지로 이동 등
 
-        // 입력 필드 초기화(선택사항)
-        setName('');
-        setDescription('');
-        setPrice('');
-        setImageUrl('');
+        // 여기서부터 비동기 작업 시작
+        try {   // (4) try 블록 시작 - 여기서 에러나면 catch 블록으로 점프
+
+            // 1. 호출할 API 라우트 주소 설정 (Next.js의 API Route 활용)
+            const apiUrl = '/api/admin/new';
+
+            // 2. fetch API를 사용하여 POST 요청 보내기
+            // 첫번째 인자로 URL, 두번째 인자로 요청 옵션 객체를 전달
+            // 요청 옵션 객체에는 HTTP 메서드, 헤더, 본문(body) 등을 설정
+            // fetch는 응답 객체(Response)를 포함하는 Promise를 반환
+
+            // 첫 번째 await: fetch 호출 및 서버 응답 기다리기
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // 요청 본문이 JSON임을 명시해 서버에 알림
+                },
+                body: JSON.stringify(newProduct), // 입력 값들을 JSON 문자열로 변환하여 요청 본문에 담기
+            }); // (5) fetch Promise 반환 -> await가 기다림
+                // fetch가 끝나면 response 변수에 응답(Response) 객체가 할당됨
+                // 네트워크 오류 시 여기서 catch 블록으로 점프
+
+            // 3. 서버 응답 처리
+            // (5)fetch가 응답 받은 후 여기로 진입
+            if (response.ok) { //응답 상태 코드가 200번대 성공일 경우
+                // (6) 동기 실행 - 응답 status 확인
+
+                // 두 번째 await(성공시): 응답 본문(body) 읽어서 JSON파싱 기다리기기
+                const result = await response.json(); // 응답 본문을 JSON으로 파싱
+                // (7) response.json() Promise 반환 -> await가 기다림
+                // 응답 다 읽고 JSON 파싱 끝나면 결과가 할당된 result 객체 얻음
+                // 파싱 오류 시 여기서 catch 블록으로 점프
+
+                // (8) 동기 실행 - 파싱된 결과 출력
+                console.log('상품 등록 성공:', result);
+
+                // 성공적으로 등록되면 입력 필드 초기화
+                // 입력 필드 초기화(선택사항)
+                setName(''); // (9) 동기 실행
+                setDescription(''); // (10) 동기 실행
+                setPrice(''); // (11) 동기 실행
+                setImageUrl(''); // (12) 동기 실행
+
+                // 성공 메시지 보여주기 또는 다른 페이지로 이동(예: 등록된 상품 목록 페이지)
+                // (13) 동기 실행
+                alert('상품 등록 성공!'); // 간단하게 alert로 알림
+                // router.push('/admin/products'); // 상품 목록 페이지로 이동(Next.js 라우터 사용시 router 필요)
+            } else { //응답 상태 코드가 200번대가 아닐 경우 //(6) 동기 실행 - 응답 status 확인
+
+                // 세 번째 await(실패시): 응답 본문(body) 읽어서 JSON 파싱 기다리기
+                const errorResult = await response.json(); // 에러 응답 본문을 JSON으로 파싱
+                // (14) response.json() Promise 반환 -> await가 기다림
+                // 에러 본문 다 읽고 JSON 파싱끝나면 errorResult 객체 얻음
+                // 파싱 오류 시 여기서 catch 블록으로 점프
+                console.error('상품 등록 실패:', response.status, " : ", errorResult); // (15) 동기 실행 - 에러 출력
+                alert(`상품 등록 실패: ${errorResult.message || '알 수 없는 오류'}`); // 에러 메시지 표시 (16) 동기 실행
+            }
+            // (4) 또는 (5),(7),(14)에서 오류가 발생하면 이 블록으로 점프
+        } catch (error) { // fetch 요청 자체에서 발생한 네트워크 오류 등
+            console.error('API 호출 중 에러 발생:', error); // (17) 동기 실행
+            alert('상품 등록 중 네트워크 오류가 발생했습니다.'); // (18) 동기 실행
+        }
     };
 
     return (
