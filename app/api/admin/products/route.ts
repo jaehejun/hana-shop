@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
         console.log('새로운 상품 등록 요청:', newProduct);
 
-        if (!newProduct.name || !newProduct.description || !newProduct.price || !newProduct.imageUrl) {
+        if (!newProduct.name || !newProduct.description || !newProduct.price) {
             // 필수 필드가 누락된 경우
             return NextResponse.json(
                 { error: '모든 필드를 입력해주세요.' },

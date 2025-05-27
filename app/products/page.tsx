@@ -4,7 +4,7 @@
 import primsa from "@/lib/prisma"; // Prisma Client 인스턴스 가져오기
 
 // Client Component로 상품 목록을 보여줄 컴포넌트를 import
-import ProductList from '@/components/ProductList';
+import ProductList from '@/app/components/ProductList';
 
 // 상품 목록 페이지 컴포넌트 (Server Component)
 // asnyc 함수로 만들어서 await를 사용해 비동기 DB 작업 기다릴 수 있음
