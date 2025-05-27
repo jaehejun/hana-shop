@@ -4,11 +4,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 
-// Prisma Client 인스턴스 생성 (DB와 통신하기 위해 필요)
-import { PrismaClient } from "@prisma/client";
+// // Prisma Client 인스턴스 생성 (DB와 통신하기 위해 필요)
+// import { PrismaClient } from "@prisma/client";
 
-// Prisma 클라이언트 객체 생성
-const prisma = new PrismaClient();
+// // Prisma 클라이언트 객체 생성
+// const prisma = new PrismaClient();
+
+// Prisma 클라이언트 인스턴스를 가져오는 유틸리티 파일을 임포트
+import prisma from "@/lib/prisma"; // prisma.ts 파일에서 PrismaClient 인스턴스를 가져옴
 
 // POST 요청을 처리하는 API 라우트 함수
 // request 객체는 클라이언트에서 보낸 요청 정보를 담고 있음
