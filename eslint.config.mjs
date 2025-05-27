@@ -1,3 +1,5 @@
+// ESLint 설정파일. 코드 스타일과 문법 검사 규칙 정의의
+
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";

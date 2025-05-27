@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  // @id 해당 필드가 테이블의 기본 키(Primary Key)임을 나타냄: 기본키는 필수로 각 모델에 반드시 하나 이상의 필드에 @id가 붙어있어야함
+  // @default(autoincrement()) 해당 필드의 값이 자동으로 증가하도록 설정: 주로 숫자형 기본키에 사용됨
+  // @updatedAt 해당 필드가 레코드가 업데이트될 때마다 현재 시간으로 자동으로 갱신됨
+  // @default(now()) 해당 필드의 기본값을 현재 시간으로 설정: 주로 생성일시를 기록할 때 사용됨
+  // @unique 해당 필드의 값이 테이블 내에서 유일해야 함을 나타냄: 중복된 값이 허용되지 않음
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String
+  price       Int
+  imageUrl    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
